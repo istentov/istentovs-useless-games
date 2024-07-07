@@ -1,9 +1,17 @@
 # episode 1 imports
+
 from tkinter import *
 from tkinter.colorchooser import askcolor
 from tkinter import ttk
 import tkinter as tk
-from tkinter import filedialog
+from tkinter import filedialog, messagebox, simpledialog
+
+# episode 2 imports
+
+# import tkinter as tk
+# from tkinter.colorchooser import askcolor
+from PIL import Image, ImageDraw, ImageTk
+
 ####################
 import time
 import random
@@ -140,6 +148,112 @@ class Whiteboard(tk.Tk):
         self.canvas.delete("all")
         self.strokes = []
 
+class GradientPicker:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Gradient Color Picker")
+
+        self.colors = []
+        self.positions = []
+
+        self.canvas = tk.Canvas(root, width=500, height=50, bg="white")
+        self.canvas.pack(pady=10)
+
+        self.add_color_button = tk.Button(root, text="Add Color", command=self.add_color)
+        self.add_color_button.pack(pady=5)
+
+        self.save_button = tk.Button(root, text="Save Gradient", command=self.save_gradient)
+        self.save_button.pack(pady=5)
+
+    def indexOfSorted(self, array, value):
+        # Find the position to insert the new value
+        position = 0
+        while position < len(array) and array[position] < value:
+            position += 1
+
+        return position
+
+    def add_color(self):
+        color = askcolor()[1]
+        if color:
+            position = simpledialog.askfloat("Input", "Enter position (0 to 1):", minvalue=0, maxvalue=1)
+            if position is not None:
+                iOS = self.indexOfSorted(self.positions, position)
+                self.positions.insert(iOS, position)
+                self.colors.insert(iOS, color)
+                # check
+                print(self.colors, self.positions)
+                ###
+                self.update_canvas()
+
+    def update_canvas(self):
+        self.canvas.delete("all")
+        width = 500
+        height = 50
+        if not self.colors:
+            return
+
+        # Create a new image to draw the gradient
+        gradient = Image.new('RGB', (width, height), color=0)
+        draw = ImageDraw.Draw(gradient)
+
+        # Draw the gradient
+        for i in range(len(self.colors) - 1):
+            start_pos = int(self.positions[i] * width)
+            end_pos = int(self.positions[i + 1] * width)
+            for x in range(start_pos, end_pos):
+                ratio = (x - start_pos) / (end_pos - start_pos)
+                r1, g1, b1 = self.root.winfo_rgb(self.colors[i])
+                r2, g2, b2 = self.root.winfo_rgb(self.colors[i + 1])
+                r = int(r1 * (1 - ratio) + r2 * ratio) // 256
+                g = int(g1 * (1 - ratio) + g2 * ratio) // 256
+                b = int(b1 * (1 - ratio) + b2 * ratio) // 256
+                draw.line([(x, 0), (x, height)], fill=(r, g, b))
+
+        if self.colors:
+            last_pos = int(self.positions[-1] * width)
+            for x in range(last_pos, width):
+                r, g, b = self.root.winfo_rgb(self.colors[-1])
+                r = r // 256
+                g = g // 256
+                b = b // 256
+                draw.line([(x, 0), (x, height)], fill=(r, g, b))
+
+        # Convert the gradient image to a format tkinter can use and display it
+        gradient_tk = ImageTk.PhotoImage(gradient)
+        self.canvas.create_image(0, 0, anchor=tk.NW, image=gradient_tk)
+        self.canvas.image = gradient_tk
+
+    def save_gradient(self):
+        width = 500
+        height = 50
+        gradient = Image.new('RGB', (width, height), color=0)
+        draw = ImageDraw.Draw(gradient)
+
+        for i in range(len(self.colors) - 1):
+            start_pos = int(self.positions[i] * width)
+            end_pos = int(self.positions[i + 1] * width)
+            for x in range(start_pos, end_pos):
+                ratio = (x - start_pos) / (end_pos - start_pos)
+                r1, g1, b1 = self.root.winfo_rgb(self.colors[i])
+                r2, g2, b2 = self.root.winfo_rgb(self.colors[i + 1])
+                r = int(r1 * (1 - ratio) + r2 * ratio) // 256
+                g = int(g1 * (1 - ratio) + g2 * ratio) // 256
+                b = int(b1 * (1 - ratio) + b2 * ratio) // 256
+                draw.line([(x, 0), (x, height)], fill=(r, g, b))
+
+        if self.colors:
+            last_pos = int(self.positions[-1] * width)
+            for x in range(last_pos, width):
+                r, g, b = self.root.winfo_rgb(self.colors[-1])
+                r = r // 256
+                g = g // 256
+                b = b // 256
+                draw.line([(x, 0), (x, height)], fill=(r, g, b))
+
+        gradient.save("gradient.png")
+        messagebox.showinfo("Info", "Gradient saved as gradient.png")
+
 def reveal(text, duration):
     for char in text:
         sys.stdout.write(char)
@@ -159,4 +273,10 @@ def authorize(title, author):
 def episode1():
     authorize("whiteboard :)", "mysticknow")
     root = Whiteboard()
+    root.mainloop()
+
+def episode2():
+    authorize("gradientpicker!", "mysticknow")
+    root = tk.Tk()
+    app = GradientPicker(root)
     root.mainloop()
