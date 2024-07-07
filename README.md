@@ -12,3 +12,4 @@ unfinished unprecedented results involve `fun()` not working
 ### alpha 0.0.2.1
 added volumes, the primary function of useless-games. volume 1 is being worked on
 episode 1 is finished with title "whiteboard"
+episode 2 is finished with title "gradientpicker"
