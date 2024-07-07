@@ -6,7 +6,11 @@ from tkinter import ttk
 import tkinter as tk
 from tkinter import filedialog, messagebox, simpledialog
 
-# episode 2 imports
+# episode 3 imports
+
+from pytube import YouTube
+from pprint import pprint
+import inquirer
 
 # import tkinter as tk
 # from tkinter.colorchooser import askcolor
@@ -254,6 +258,25 @@ class GradientPicker:
         gradient.save("gradient.png")
         messagebox.showinfo("Info", "Gradient saved as gradient.png")
 
+def YoutubeToFileConverter():
+    questions = [
+        inquirer.Text('link', message="Link of video?"),
+        inquirer.List(
+            "extension",
+            message="File extension?",
+            choices=[".mp3", ".mp4"],
+        )
+    ]
+
+    answers = inquirer.prompt(questions)
+
+    # Download the YouTube video
+    video_url = answers.get('link')
+    yt = YouTube(video_url)
+    stream = yt.streams.get_highest_resolution()
+    stream.download(output_path='.', filename=f"video{answers.get('extension')}")
+
+
 def reveal(text, duration):
     for char in text:
         sys.stdout.write(char)
@@ -280,3 +303,7 @@ def episode2():
     root = tk.Tk()
     app = GradientPicker(root)
     root.mainloop()
+
+def episode3():
+    authorize("youtube 2 file converter!", "mysticknow")
+    YoutubeToFileConverter()
