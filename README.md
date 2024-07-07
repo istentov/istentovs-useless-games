@@ -10,6 +10,6 @@ the only one and the HONOURED one contributor is only me (Trương Nguyễn Huâ
 the incomplete prototype known as "class project"
 unfinished unprecedented results involve `fun()` not working
 ### alpha 0.0.2.1
-added volumes, the primary function of useless-games. volume 1 is being worked on
-episode 1 is finished with title "whiteboard"
+added volumes, the primary function of useless-games. volume 1 is being worked on<br>
+episode 1 is finished with title "whiteboard"<br>
 episode 2 is finished with title "gradientpicker"
