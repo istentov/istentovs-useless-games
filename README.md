@@ -5,6 +5,9 @@ useless-games is a not so useful repository about lots of games.
 class project even though they did not ask
 ## who?
 the only one and the HONOURED one contributor is only me (Trương Nguyễn Huân)
+## instruct
+`pip install -r requirements.txt`<br>to get the libraries working, because there are so much.<br>
+`py main.py`
 ## *changelog*:
 ### alpha 0.0.1
 the incomplete prototype known as "class project"
