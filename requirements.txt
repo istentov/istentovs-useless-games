@@ -4,3 +4,5 @@ pprint
 inquirer
 pillow
 inspect
+ffmpeg-python
+requests
